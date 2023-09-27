@@ -17,7 +17,7 @@ class Grid:
     def __init__(self, nX, nY):
         self.nX = nX
         self.nY = nY
-        self.grid = np.arange(nX*nY, dtype=np.int16).reshape(nX, nY)
+        self.grid = np.array(nX*nY, dtype=np.int16).reshape(nX, nY)
 
     def getValue(self, x, y):
         return self.grid[x, y]
@@ -39,22 +39,34 @@ class Pacman:
             self.alive = False
 
     def move(self, direction):
+        gVal = 0
         if (direction == 0 and self.y != 0):
             self.y = self.y - 1
-            if(self.grid.setValue(self.x, self.y+1, 2)==0)
-                self.grid.setValue(self.x, self.y+1, 2)
+            gVal = self.grid.getValue(self.x, self.y)
         elif (direction == 1 and self.x != grid.nX):
             self.x = self.x + 1
-            if(self.grid.setValue(self.x-1, self.y, 2)==0)
-                self.grid.setValue(self.x-1, self.y, 2)
+            gVal = self.grid.getValue(self.x, self.y)
         elif (direction == 2 and self.y != grid.nY):
             self.y = self.y + 1
-            if(self.grid.setValue(self.x, self.y-1, 2)==0)
-                self.grid.setValue(self.x, self.y-1, 2)
+            gVal = self.grid.getValue(self.x, self.y)
         elif (direction == 3 and self.x != 0):
             self.x = self.x -1
-            if(self.grid.setValue(self.x+1, self.y, 2)==0)
-                self.grid.setValue(self.x+1, self.y, 2)
+            gVal = self.grid.getValue(self.x, self.y)
+
+        if (gVal == 0):
+            self.grid.setValue(self.x, self.y, 2)
+
+class Game:
+
+    def __init__(self, grid):
+        self.grid = grid
+        self.pacman
+        self.ghost
+        self.playableGhost
+        # self.timer
+        # self.completion    a voir
+    
+
 
 
 
