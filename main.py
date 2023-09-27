@@ -13,6 +13,8 @@ class Grid:
     # 1 = case pleine
     # 2 = case en construction
     # 3 = case corrompue
+    # 4 = PacMan
+    # 5 = Fantomes
 
     def __init__(self, nX, nY):
         self.nX = nX
@@ -68,5 +70,58 @@ class Game:
     
 
 
+
+class PlayableGhost:
+
+    def __init__(self, grid):
+        self.x
+        self.y
+        self.grid = grid
+        self.direction
+
+    def move(self, direction):
+        if (direction == 0 and self.y-1 != 1 and self.y-1 != 2 and self.y-1 != 3 and self.y-1 != 4):
+            self.y = self.y - 1
+        elif (direction == 1 and self.x+1 != 1 and self.x+1 != 2 and self.x+1 != 3 and self.x+1 != 4):
+            self.x = self.x + 1
+        elif (direction == 2 and self.y+1 != 1 and self.y+1 != 2 and self.y+1 != 3 and self.y+1 != 4):
+            self.y = self.y + 1
+        elif (direction == 3 and self.x-1 != 1 and self.x-1 != 2 and self.x-1 != 3 and self.x-1 != 4):
+            self.x = self.x -1*
+
+    def updateMove(self, direction) :
+        self.move(self, direction)
+
+
+class Ghost:
+
+    def __init__(self, grid, direction):
+        self.x
+        self.y
+        self.grid = grid
+        self.direction = direction
+
+    #UP-RIGHT = 0
+    #DOWN-RIGHT = 1
+    #DOWN-LEFT = 2
+    #UP-LEFT = 3
+
+    def move(self, direction):
+        if (direction == 0 and self.y-1 == 0 and self.x+1 == 0):
+            self.y = self.y - 1
+        elif (direction == 1 and self.x+1 ==0 and self.y+1 == 0):
+            self.x = self.x + 1
+        elif (direction == 2 and self.y+1 == 0 and self.x-1 == 0):
+            self.y = self.y + 1
+        elif (direction == 3 and self.x-1 == 0 and self.y-1 == 0):
+            self.x = self.x - 1
+        elif (direction == 3)
+            self.direction = 0
+        else
+            self.direction = direction + 1
+            
+
+    def updateMove(self, direction) :
+        self.move(self, direction)
 
 
