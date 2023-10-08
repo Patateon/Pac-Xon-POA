@@ -19,6 +19,8 @@ class Grid:
         self.grid[-1,:]=1
         self.grid[:,-1]=1
 
+    def getSize(self):
+        return [self.nX, self.nY]
 
     def getValue(self, x, y):
         return self.grid[x, y]
@@ -97,5 +99,18 @@ class Grid:
                 self.endGame=True
             print("taux de remplissage actuel : "+str(c/((self.nX-2)*(self.nY-2))))
             print("taux remplissage requis : " + str(self.tr))
+
+    def propagation(self):
+        for x in range(self.nX):
+            for y in range(self.nY):
+                if (self.getValue(x, y) == 3): # Pas besoin de check si on est pas au bord mais quand même, Aled on peut sans doute faire mieux
+                    if (self.getValue(x-1, y)==2):
+                        self.setValue(x, y, 3)
+                    if (self.getValue(x, y-1)==2):
+                        self.setValue(x, y, 3)
+                    if (self.getValue(x+1, y)==2):
+                        self.setValue(x, y, 3)
+                    if (self.getValue(x, y+1)==2):
+                        self.setValue(x, y, 3)
             
         
