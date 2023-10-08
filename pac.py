@@ -32,7 +32,6 @@ class PacMan:
     match direction with:
         case Direction.UP:
 
-
         case Direction.RIGHT:
             
         case Direction.DOWN:
