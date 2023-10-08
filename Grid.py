@@ -151,7 +151,7 @@ grid_instance2.setValue(2,6,2)
 grid_instance2.setValue(1,6,2)
 print(grid_instance2.grid)
 grid_instance2.setEndPath(True)
-grid_instance2.update(1,4,5,2)
+grid_instance2.update(4,4,5,2)
 print(grid_instance2.grid)
 print("Victoire? "+str(grid_instance2.endGame))
 
