@@ -20,7 +20,7 @@ class Game:
     def initGame(self):
         self.grid.initGrid()
         for i in range(self.nPhantom):
-            self.phantom[i] = Phantom(self.phantomCoord[i][0], self.phantomCoord[i][1], self.grid)
+            self.phantom[i] = Phantom(self.phantomCoord[i][0], self.phantomCoord[i][1], self)
 
     def getGrid(self):
         return self.grid
