@@ -52,3 +52,10 @@ if __name__ == "__main__":
     print(grid_instance2.grid)
     print("Victoire? "+str(grid_instance2.endGame))
 
+    game = Game(10, 10, 0.2, 2, [[3,5], [7, 8]])
+    game.initGame()
+    game.getPacman().move(Direction.RIGHT)
+    game.getPacman().move(Direction.RIGHT)
+    for i in range(10):
+        game.getPacman().move(Direction.DOWN)
+    print(game.getGrid().grid)
