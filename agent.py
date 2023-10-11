@@ -22,14 +22,13 @@ class Agent():
     
     def nNeighbour(self, n):
         
-        neighbour = self.getNeighbour(self.game.getPacman().getCoord()[0], self.game.getPacman().getCoord()[1])
-        tmp = neighbour
+        neighbours = [self.getNeighbour(self.game.getPacman().getCoord()[0], self.game.getPacman().getCoord()[1])]
+        tmp = neighbours
         for i in range(n):
-            print("neighbour : " + str(neighbour))
-            for j in range(len(neighbour)):
-                print("j : " + str(j))
-                tmp.append([self.getNeighbour(neighbour[j][0], neighbour[j][1])])
-            print("tmp : " + str(tmp))
-            neighbour+=tmp
+            for neighbour in neighbours:
+                print(neighbours)
+                for coord in neighbour:
+                    tmp.append(self.getNeighbour(coord[0], coord[1]))
+            neighbours+=tmp
 
-        return neighbour
+        return tmp
