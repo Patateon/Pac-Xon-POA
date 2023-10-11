@@ -1,5 +1,5 @@
 from grid import *
-from pac import *
+from game import *
 import pygame
 
         
@@ -32,10 +32,6 @@ if __name__ == "__main__":
     game.initGame()
     game.getPacman().move(Direction.RIGHT)
     game.getPacman().move(Direction.RIGHT)
-    game.getPacman().move(Direction.RIGHT)
-    game.getPacman().move(Direction.RIGHT)
-    game.getPacman().move(Direction.RIGHT)
     for i in range(7):
         game.getPacman().move(Direction.DOWN)
-    game.getPhantom()[0].move(Direction.LEFT) 
     print(game.getGrid().grid)
