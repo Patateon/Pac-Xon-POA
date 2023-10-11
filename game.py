@@ -95,6 +95,9 @@ class PacMan:
         self.y = y
         self.game = game
 
+    def getCoord(self):
+        return (self.x, self.y)
+
 
     def move(self, direction):
         currentX, currentY = self.x, self.y
