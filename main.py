@@ -32,6 +32,12 @@ if __name__ == "__main__":
     game.initGame()
     game.getPacman().move(Direction.RIGHT)
     game.getPacman().move(Direction.RIGHT)
+
+    
     for i in range(7):
         game.getPacman().move(Direction.DOWN)
+    
+    game.getPhantom()[0].move(Direction.UP)
+    game.getGrid().update(game.getPhantom()[0].getX(), game.getPhantom()[0].getY(), game.getPhantom()[1].getX(), game.getPhantom()[1].getY())
+    
     print(game.getGrid().grid)
