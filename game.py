@@ -41,6 +41,12 @@ class Phantom:
 
     def getCoord(self):
         return [self.x, self.y]
+
+    def getX(self):
+        return self.x
+
+    def getY(self):
+        return self.y
     
     def move(self, direction):
         currentX, currentY = self.x, self.y
@@ -48,41 +54,45 @@ class Phantom:
 
         # C'est dégueu je sais, skill issue
         match direction:
-            case Direction.UP:
+            case Direction.LEFT: #up-right
                 if (currentY != 0): # On vérifie si on ne va pas au dessus de la grille
-                    nextX, nextY = currentX, currentY-1
+                    nextX, nextY = currentX+1, currentY-1
                     nextValue = self.game.getGrid().getValue(nextX, nextY)
                     if (nextValue == 2):
                         self.game.getGrid().setValue(nextX, nextY, 3)
                     if nextValue != 1 or nextValue != 2:
                         self.y = nextY
+                        self.x = nextX
                 
-            case Direction.RIGHT:
+            case Direction.DOWN: #down-right
                 if (currentX != self.game.getGrid().getSize()[0]): # On vérifie si on ne va pas à droite de la grille
-                    nextX, nextY = currentX+1, currentY
+                    nextX, nextY = currentX+1, currentY+1
                     nextValue = self.game.getGrid().getValue(nextX, nextY)
                     if (nextValue == 2):
                         self.game.getGrid().setValue(nextX, nextY, 3)
                     if nextValue != 1 or nextValue != 2:
                         self.x = nextX
+                        self.y = nextY
 
-            case Direction.DOWN:
+            case Direction.RIGHT: #down-left
                 if (currentY != self.game.getGrid().getSize()[1]): # On vérifie si on ne va pas en dessous de la grille
-                    nextX, nextY = currentX, currentY+1
+                    nextX, nextY = currentX-1, currentY+1
                     nextValue = self.game.getGrid().getValue(nextX, nextY)
                     if (nextValue == 2):
                         self.game.getGrid().setValue(nextX, nextY, 3)
                     if nextValue != 1 or nextValue != 2:
                         self.y = nextY
+                        self.x = nextX
 
-            case Direction.LEFT:
+            case Direction.UP: #up-left
                 if (currentX != 0): # On vérifie si on ne va pas à gauche de la grille
-                    nextX, nextY = currentX-1, currentY
+                    nextX, nextY = currentX-1, currentY-1
                     nextValue = self.game.getGrid().getValue(nextX, nextY)
                     if (nextValue == 2):
                         self.game.getGrid().setValue(nextX, nextY, 3)
                     if nextValue != 1 or nextValue != 2:
                         self.x = nextX
+                        self.y = nextY
 
             case _:
                 pass
