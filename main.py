@@ -5,37 +5,48 @@ import pygame
         
 if __name__ == "__main__":
 
-    pygame.init()
-    screen = pygame.display.set_mode((1280, 720))
-    clock = pygame.time.Clock()
-    running = True
-
-    while running:
-        # poll for events
-        # pygame.QUIT event means the user clicked X to close your window
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-
-        # fill the screen with a color to wipe away anything from last frame
-        screen.fill("purple")
-
-        # RENDER YOUR GAME HERE
-
-        # flip() the display to put your work on screen
-        pygame.display.flip()
-
-        clock.tick(60)  # limits FPS to 60
-
-    pygame.quit()
     game = Game(10, 10, 0.2, 2, [[3,5], [7, 8]])
     game.initGame()
-    game.getPacman().move(Direction.RIGHT)
-    game.getPacman().move(Direction.RIGHT)
-    game.getPacman().move(Direction.RIGHT)
-    game.getPacman().move(Direction.RIGHT)
-    game.getPacman().move(Direction.RIGHT)
-    for i in range(7):
-        game.getPacman().move(Direction.DOWN)
-    game.getPhantom()[0].move(Direction.LEFT) 
-    print(game.getGrid().grid)
+
+    BLACK = (0, 0, 0)
+    DARK_BLUE = ()
+    LIGHT BLUE = ()
+    RED = ()
+    WHITE = (200, 200, 200)
+    sizeX = game.getGrid().getSize()[0]
+    sizeY = game.getGrid().getSize()[1]
+    WINDOW_WIDTH = sizeX*25
+    WINDOW_HEIGHT = sizeY*25
+
+    global SCREEN, CLOCK
+    pygame.init()
+    SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+    CLOCK = pygame.time.Clock()
+    SCREEN.fill(BLACK)
+
+    def drawGrid():
+        blockSize = 25
+        for x in range(0, WINDOW_WIDTH, blockSize):
+            for y in range(0, WINDOW_HEIGHT, blockSize):
+                match grid[x, y]:
+                    case 0:
+
+                    case 1:
+
+                    case 2:
+                    
+                    case 3:
+                rect = pygame.Rect(x, y, blockSize, blockSize)
+                pygame.draw.rect(SCREEN, WHITE, rect, 1)
+
+    while True:
+        drawGrid()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+        pygame.display.update()
+
+
+   
