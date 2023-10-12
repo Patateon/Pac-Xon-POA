@@ -1,5 +1,5 @@
-from grid import *
-from pac import *
+from game import *
+from agent import *
 import pygame
 
         
