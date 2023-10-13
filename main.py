@@ -10,7 +10,7 @@ if __name__ == "__main__":
 
     BLACK = (0, 0, 0)
     DARK_BLUE = ()
-    LIGHT BLUE = ()
+    LIGHT_BLUE = ()
     RED = ()
     WHITE = (200, 200, 200)
     sizeX = game.getGrid().getSize()[0]
@@ -30,12 +30,13 @@ if __name__ == "__main__":
             for y in range(0, WINDOW_HEIGHT, blockSize):
                 match grid[x, y]:
                     case 0:
-
+                        pass
                     case 1:
-
+                        pass
                     case 2:
-                    
+                        pass
                     case 3:
+                        pass
                 rect = pygame.Rect(x, y, blockSize, blockSize)
                 pygame.draw.rect(SCREEN, WHITE, rect, 1)
 

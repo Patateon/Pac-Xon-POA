@@ -37,6 +37,7 @@ class Phantom:
     def __init__(self, x, y, game):
         self.x = x
         self.y = y
+        self.direction = Direction.LEFT
         self.game = game #De classe Grid
 
     def getCoord(self):
@@ -47,6 +48,9 @@ class Phantom:
 
     def getY(self):
         return self.y
+    
+    def getDirection(self):
+        return self.direction
     
     def move(self, direction):
         currentX, currentY = self.x, self.y
@@ -63,6 +67,8 @@ class Phantom:
                     if nextValue != 1 or nextValue != 2:
                         self.y = nextY
                         self.x = nextX
+                    if nextValue != 0:
+                        self.changeMove(direction)
                 
             case Direction.DOWN: #down-right
                 if (currentX != self.game.getGrid().getSize()[0]): # On vérifie si on ne va pas à droite de la grille
@@ -73,6 +79,8 @@ class Phantom:
                     if nextValue != 1 or nextValue != 2:
                         self.x = nextX
                         self.y = nextY
+                    if nextValue != 0:
+                        self.changeMove(direction)
 
             case Direction.RIGHT: #down-left
                 if (currentY != self.game.getGrid().getSize()[1]): # On vérifie si on ne va pas en dessous de la grille
@@ -83,6 +91,8 @@ class Phantom:
                     if nextValue != 1 or nextValue != 2:
                         self.y = nextY
                         self.x = nextX
+                    if nextValue != 0:
+                        self.changeMove(direction)
 
             case Direction.UP: #up-left
                 if (currentX != 0): # On vérifie si on ne va pas à gauche de la grille
@@ -93,9 +103,29 @@ class Phantom:
                     if nextValue != 1 or nextValue != 2:
                         self.x = nextX
                         self.y = nextY
+                    if nextValue != 0:
+                        self.changeMove(direction)
 
             case _:
                 pass
+    
+    def changeMove(self, direction):
+        match direction:
+            case Direction.LEFT:
+                self.direction = Direction.DOWN
+                self.move(Direction.DOWN)
+            case Direction.DOWN:
+                self.direction = Direction.RIGHT
+                self.move(Direction.RIGHT)
+            case Direction.RIGHT:
+                self.direction = Direction.UP
+                self.move(Direction.UP)
+            case Direction.UP:
+                self.direction = Direction.LEFT
+                self.move(Direction.LEFT)
+            case _:
+                pass
+
 
 
 class PacMan:
