@@ -28,7 +28,13 @@ class Grid:
     def setValue(self, x, y, v):
         self.grid[x,y]=v
 
-    def setEndPath(self,value) :#accesseur pour pacman quand il atteint un 1 apres avoir commencer a former chemin(trouve un 1 après avoir mis un 2 position précédente)
+    def getEndGame(self): 
+        return self.endGame
+
+    def setEndGame(self, value:bool): 
+        self.endGame = value
+
+    def setEndPath(self,value:bool) :#accesseur pour pacman quand il atteint un 1 apres avoir commencer a former chemin(trouve un 1 après avoir mis un 2 position précédente)
         self.endPath=value
  
     
@@ -55,7 +61,7 @@ class Grid:
                     dy = [-1, 1, 0, 0]
                     for j in range(4):#On propage de 1 de chaque coté
                         new_tx, new_ty = tx + dx[j], ty + dy[j]
-                        if (0 <= new_tx < self.nX and 0 <= new_ty < self.nY and self.getValue(new_tx, new_ty) not in [1, 2, 6]):#On vérifié si l'on depasse les bords et si la valeur ne veut pas dire qu'on peut plus propager
+                        if (0 <= new_tx < self.nX and 0 <= new_ty < self.nY and self.getValue(new_tx, new_ty) not in [1, 2, 3, 6]):#On vérifié si l'on depasse les bords et si la valeur ne veut pas dire qu'on peut plus propager
                             self.setValue(new_tx, new_ty, 6)
                             aTraite.append([new_tx, new_ty])
 
@@ -80,7 +86,7 @@ class Grid:
                         dy = [-1, 1, 0, 0]
                         for j in range(4):#On propage de 1 de chaque coté
                             new_tx, new_ty = tx + dx[j], ty + dy[j]
-                            if (0 <= new_tx < self.nX and 0 <= new_ty < self.nY and self.getValue(new_tx, new_ty) not in [1, 2, 7]):#On vérifié si l'on depasse les bords et si la valeur ne veut pas dire qu'on peut plus propager
+                            if (0 <= new_tx < self.nX and 0 <= new_ty < self.nY and self.getValue(new_tx, new_ty) not in [1, 2, 3, 7]):#On vérifié si l'on depasse les bords et si la valeur ne veut pas dire qu'on peut plus propager
                                 self.setValue(new_tx, new_ty, 7)
                                 aTraite.append([new_tx, new_ty])
 
@@ -94,33 +100,38 @@ class Grid:
             #Il nous reste à changer les valeurs de la grille en la traversant
             for i in range(self.nX) :
                 for j in range(self.nY) :
-                    if(self.getValue(i,j)==0 or self.getValue(i,j)==2) : 
+                    if(self.getValue(i,j)==0 or self.getValue(i,j)==2 or self.getValue(i,j) == 3) : 
                         self.setValue(i,j,1)
                     if(self.getValue(i,j)==6 or self.getValue(i,j)==7) :
                         self.setValue(i,j,0)
+
+
+            c = np.sum(self.grid[self.grid==1])-(2*self.nX+2*self.nY-4)
             
-            c=0#comptage du nombre de 1 pour taux de remplissage
-            for i in range(1,self.nX-1,1) :
-                for j in range(1,self.nY-1,1) :
-                    if(self.getValue(i,j)==1) :
-                        c+=1
+            # c=0#comptage du nombre de 1 pour taux de remplissage
+            # for i in range(1,self.nX-1,1) :
+            #     for j in range(1,self.nY-1,1) :
+            #         if(self.getValue(i,j)==1) :
+            #             c+=1
             if(c/((self.nX-2)*(self.nY-2))>self.tr) :#test du taux de remplissage
-                self.endGame=True
+                self.setEndGame(True)
             print("taux de remplissage actuel : "+str(c/((self.nX-2)*(self.nY-2))))
             print("taux remplissage requis : " + str(self.tr))
             
 
     def propagation(self):
-        for x in range(self.nX):
-            for y in range(self.nY):
-                if (self.getValue(x, y) == 3): # Pas besoin de check si on est pas au bord mais quand même, Aled on peut sans doute faire mieux
-                    if (self.getValue(x-1, y)==2):
-                        self.setValue(x, y, 3)
-                    if (self.getValue(x, y-1)==2):
-                        self.setValue(x, y, 3)
-                    if (self.getValue(x+1, y)==2):
-                        self.setValue(x, y, 3)
-                    if (self.getValue(x, y+1)==2):
-                        self.setValue(x, y, 3)
+        redPoint = np.where(self.grid==3)
+        for i in range(redPoint[0].shape[0]):
+            self.propage(redPoint[0][i], redPoint[1][i])
+
+    def propage(self, x, y):
+        if (self.getValue(x-1, y)==2):
+            self.setValue(x-1, y, 3)
+        if (self.getValue(x, y-1)==2):
+            self.setValue(x, y-1, 3)
+        if (self.getValue(x+1, y)==2):
+            self.setValue(x+1, y, 3)
+        if (self.getValue(x, y+1)==2):
+            self.setValue(x, y+1, 3)
             
         

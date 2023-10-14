@@ -13,10 +13,10 @@ vel=20      #size of the block or speed pac bc he travels by block
 nbblock_x=SCREEN_WIDTH//vel     
 nbblock_y=SCREEN_HEIGHT//vel
 
-game=Game(nbblock_y,nbblock_x,0.5,2,[[3,6],[7,4]])
+game=Game(nbblock_y,nbblock_x,0.5,2,[[8,6],[17,4]])
 game.initGame()
 
-def crete_level(game, nbblock_x, nbblock_y, speed_pac):
+def create_level(game, nbblock_x, nbblock_y, speed_pac):
     for j in range(nbblock_x):
         for i in range(nbblock_y):
             if game.grid.getValue(i,j)==1:
@@ -35,7 +35,7 @@ def crete_level(game, nbblock_x, nbblock_y, speed_pac):
 
 
 def draw_ghosts(coord_x,coord_y,speed_pac):
-    pygame.draw.rect(screen,(171,0,171), (coord_x*speed_pac,coord_y*speed_pac, speed_pac, speed_pac))
+    pygame.draw.rect(screen,(171,0,171), (coord_y*speed_pac,coord_x*speed_pac, speed_pac, speed_pac))
 
 def draw_pac(coord_x,coord_y,speed_pac):
     radius = 10
@@ -46,34 +46,50 @@ def draw_pac(coord_x,coord_y,speed_pac):
 
 
 running = True
+delay = 80
 
 while running:
-    
-    pygame.time.delay(16)
+
+    start = pygame.time.get_ticks()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    game.getGrid().propagation()
     
     screen.fill((0,0,0))
    
    
-    crete_level(game, nbblock_x, nbblock_y, vel)
+    create_level(game, nbblock_x, nbblock_y, vel)
    
    
     draw_pac(game.pacman.x,game.pacman.y,vel)
+    
 
-    game.getPacman().move(Direction.DOWN)
-    game.getPacman().move(Direction.RIGHT)
     game.getPhantom()[0].move()
     game.getPhantom()[1].move()
     game.getGrid().propagation()
+    game.getPacman().is_propagated()
+    # game.getGrid().propagation()
+
+    keys=pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        game.getPacman().move(Direction.LEFT)
+    elif keys[pygame.K_RIGHT]:
+        game.getPacman().move(Direction.RIGHT)
+    elif keys[pygame.K_UP]:
+        game.getPacman().move(Direction.UP)
+    elif keys[pygame.K_DOWN]:
+        game.getPacman().move(Direction.DOWN)
     
     
     draw_ghosts(game.phantom[0].getCoord()[0],game.phantom[0].getCoord()[1],vel)
     draw_ghosts(game.phantom[1].getCoord()[0],game.phantom[1].getCoord()[1],vel)
 
+    running = not game.getGrid().getEndGame()
+
+    timeTaken = pygame.time.get_ticks()-start
+    actualDelay = delay - timeTaken
+    pygame.time.delay(actualDelay)
 
     pygame.display.update()
 

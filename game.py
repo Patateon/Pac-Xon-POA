@@ -52,77 +52,114 @@ class Phantom:
     def getDirection(self):
         return self.direction
     
-    def move(self, direction):
+    def move(self, rec=False):
         currentX, currentY = self.x, self.y
         currentValue = self.game.getGrid().getValue(currentX, currentY)
+        direction = self.direction
 
         # C'est dégueu je sais, skill issue
         match direction:
             case Direction.LEFT: #up-right
-                if (currentY != 0): # On vérifie si on ne va pas au dessus de la grille
+                if (currentY != 0 and currentX != self.game.getGrid().getSize()[1]-1): # On vérifie si on ne va pas au dessus de la grille
                     nextX, nextY = currentX+1, currentY-1
                     nextValue = self.game.getGrid().getValue(nextX, nextY)
-                    if (nextValue == 2):
-                        self.game.getGrid().setValue(nextX, nextY, 3)
-                    if nextValue != 1 or nextValue != 2:
+                    topValue, botValue = self.game.getGrid().getValue(currentX, currentY-1), self.game.getGrid().getValue(currentX+1, currentY)
+                    if (topValue == 2):
+                        self.game.getGrid().setValue(currentX, currentY-1, 3)
+                    if (botValue == 2):
+                        self.game.getGrid().setValue(currentX+1, currentY, 3)
+                    if nextValue == 0:
                         self.y = nextY
                         self.x = nextX
-                    if nextValue != 0:
-                        self.changeMove(direction)
+                    else:
+                        self.changeMove(direction, topValue, botValue)
+                        if (not rec):
+                            self.move(True)
                 
             case Direction.DOWN: #down-right
-                if (currentX != self.game.getGrid().getSize()[0]): # On vérifie si on ne va pas à droite de la grille
+                if (currentX != self.game.getGrid().getSize()[0]-1 and currentX != self.game.getGrid().getSize()[1]-1): # On vérifie si on ne va pas à droite de la grille
                     nextX, nextY = currentX+1, currentY+1
                     nextValue = self.game.getGrid().getValue(nextX, nextY)
-                    if (nextValue == 2):
-                        self.game.getGrid().setValue(nextX, nextY, 3)
-                    if nextValue != 1 or nextValue != 2:
-                        self.x = nextX
+                    topValue, botValue = self.game.getGrid().getValue(currentX, currentY+1), self.game.getGrid().getValue(currentX+1, currentY)
+                    if (topValue == 2):
+                        self.game.getGrid().setValue(currentX, currentY+1, 3)
+                    if (botValue == 2):
+                        self.game.getGrid().setValue(currentX+1, currentY, 3)
+                    if nextValue == 0:
                         self.y = nextY
-                    if nextValue != 0:
-                        self.changeMove(direction)
+                        self.x = nextX
+                    else:
+                        self.changeMove(direction, topValue, botValue)
+                        if (not rec):
+                            self.move(True)
 
             case Direction.RIGHT: #down-left
-                if (currentY != self.game.getGrid().getSize()[1]): # On vérifie si on ne va pas en dessous de la grille
+                if (currentY != self.game.getGrid().getSize()[1]-1 and currentX != 0): # On vérifie si on ne va pas en dessous de la grille
                     nextX, nextY = currentX-1, currentY+1
                     nextValue = self.game.getGrid().getValue(nextX, nextY)
-                    if (nextValue == 2):
-                        self.game.getGrid().setValue(nextX, nextY, 3)
-                    if nextValue != 1 or nextValue != 2:
+                    topValue, botValue = self.game.getGrid().getValue(currentX, currentY+1), self.game.getGrid().getValue(currentX-1, currentY)
+                    if (topValue == 2):
+                        self.game.getGrid().setValue(currentX, currentY+1, 3)
+                    if (botValue == 2):
+                        self.game.getGrid().setValue(currentX-1, currentY, 3)
+                    if nextValue == 0:
                         self.y = nextY
                         self.x = nextX
-                    if nextValue != 0:
-                        self.changeMove(direction)
+                    else:
+                        self.changeMove(direction, topValue, botValue)
+                        if (not rec):
+                            self.move(True)
 
             case Direction.UP: #up-left
-                if (currentX != 0): # On vérifie si on ne va pas à gauche de la grille
+                if (currentX != 0 and currentX != 0): # On vérifie si on ne va pas à gauche de la grille
                     nextX, nextY = currentX-1, currentY-1
                     nextValue = self.game.getGrid().getValue(nextX, nextY)
-                    if (nextValue == 2):
-                        self.game.getGrid().setValue(nextX, nextY, 3)
-                    if nextValue != 1 or nextValue != 2:
-                        self.x = nextX
+                    topValue, botValue = self.game.getGrid().getValue(currentX, currentY-1), self.game.getGrid().getValue(currentX-1, currentY)
+                    if (topValue == 2):
+                        self.game.getGrid().setValue(currentX, currentY-1, 3)
+                    if (botValue == 2):
+                        self.game.getGrid().setValue(currentX-1, currentY, 3)
+                    if nextValue == 0:
                         self.y = nextY
-                    if nextValue != 0:
-                        self.changeMove(direction)
+                        self.x = nextX
+                    else:
+                        self.changeMove(direction, topValue, botValue)
+                        if (not rec):
+                            self.move(True)
 
             case _:
                 pass
     
-    def changeMove(self, direction):
+    def changeMove(self, direction, topValue, botValue):
         match direction:
             case Direction.LEFT:
-                self.direction = Direction.DOWN
-                self.move(Direction.DOWN)
+                if (topValue != 0 and botValue != 0):
+                    self.direction = Direction.RIGHT
+                elif (topValue != 0):
+                    self.direction = Direction.DOWN
+                else:
+                    self.direction = Direction.UP
             case Direction.DOWN:
-                self.direction = Direction.RIGHT
-                self.move(Direction.RIGHT)
+                if (topValue != 0 and botValue != 0):
+                    self.direction = Direction.UP
+                elif (topValue != 0):
+                    self.direction = Direction.LEFT
+                else:
+                    self.direction = Direction.RIGHT
             case Direction.RIGHT:
-                self.direction = Direction.UP
-                self.move(Direction.UP)
+                if (topValue != 0 and botValue != 0):
+                    self.direction = Direction.LEFT
+                elif (topValue != 0):
+                    self.direction = Direction.UP
+                else:
+                    self.direction = Direction.DOWN
             case Direction.UP:
-                self.direction = Direction.LEFT
-                self.move(Direction.LEFT)
+                if (topValue != 0 and botValue != 0):
+                    self.direction = Direction.DOWN
+                elif (topValue != 0):
+                    self.direction = Direction.RIGHT
+                else:
+                    self.direction = Direction.LEFT
             case _:
                 pass
 
@@ -142,6 +179,7 @@ class PacMan:
     def move(self, direction):
         currentX, currentY = self.x, self.y
         currentValue = self.game.getGrid().getValue(currentX, currentY)
+        nextValue = 0
 
         # C'est dégueu je sais, skill issue
         match direction:
@@ -152,7 +190,7 @@ class PacMan:
                     nextValue = self.game.getGrid().getValue(nextX, nextY)
                     if (nextValue == 0):
                         self.game.getGrid().setValue(nextX, nextY, 2)
-                    if (nextValue == 1 and currentValue == 2):
+                    if (nextValue == 1 and currentValue != 1):
                         self.game.getGrid().setEndPath(True)
                         phantoms = self.game.getPhantom()
                         self.game.getGrid().update(phantoms[0].getCoord()[0], phantoms[0].getCoord()[1], phantoms[1].getCoord()[0], phantoms[1].getCoord()[1])
@@ -164,7 +202,7 @@ class PacMan:
                     nextValue = self.game.getGrid().getValue(nextX, nextY)
                     if (nextValue == 0):
                         self.game.getGrid().setValue(nextX, nextY, 2)
-                    if (nextValue == 1 and currentValue == 2):
+                    if (nextValue == 1 and currentValue != 1):
                         self.game.getGrid().setEndPath(True)
                         phantoms = self.game.getPhantom()
                         self.game.getGrid().update(phantoms[0].getCoord()[0], phantoms[0].getCoord()[1], phantoms[1].getCoord()[0], phantoms[1].getCoord()[1])
@@ -176,7 +214,7 @@ class PacMan:
                     nextValue = self.game.getGrid().getValue(nextX, nextY)
                     if (nextValue == 0):
                         self.game.getGrid().setValue(nextX, nextY, 2)
-                    if (nextValue == 1 and currentValue == 2):
+                    if (nextValue == 1 and currentValue != 1):
                         self.game.getGrid().setEndPath(True)
                         phantoms = self.game.getPhantom()
                         self.game.getGrid().update(phantoms[0].getCoord()[0], phantoms[0].getCoord()[1], phantoms[1].getCoord()[0], phantoms[1].getCoord()[1])
@@ -188,13 +226,22 @@ class PacMan:
                     nextValue = self.game.getGrid().getValue(nextX, nextY)
                     if (nextValue == 0):
                         self.game.getGrid().setValue(nextX, nextY, 2)
-                    if (nextValue == 1 and currentValue == 2):
+                    if (nextValue == 1 and currentValue != 1):
                         self.game.getGrid().setEndPath(True)
                         phantoms = self.game.getPhantom()
                         self.game.getGrid().update(phantoms[0].getCoord()[0], phantoms[0].getCoord()[1], phantoms[1].getCoord()[0], phantoms[1].getCoord()[1])
 
             case _:
                 pass
+
+            
+        if (nextValue == 2):
+            self.game.getGrid().setEndGame(True)
+
+    def is_propagated(self):
+        if (self.game.getGrid().getValue(self.x, self.y) == 3):
+            self.game.getGrid().setEndGame(True)
+
             
 class Ghost:
 
