@@ -49,14 +49,14 @@ def draw_pac(coord_x,coord_y,speed_pac):
     pygame.draw.circle(screen, (255,255,0), (radius+(coord_y*speed_pac),radius+(coord_x*speed_pac)), radius)
 
 
-agent = Agent(game, 50)
+agent = Agent(game, 10)
 
 running = True
 delay = 32
 tick = 0
 
 startingPoint = np.array(game.getPacman().getCoord())
-endPoints = np.array([nbblock_y-1, nbblock_x//2])
+endPoints = agent.findEndPoints(startingPoint, rng)
 agent.startSearch(startingPoint, endPoints)
 while running:
 
@@ -93,11 +93,9 @@ while running:
 
     if (agent.panicHere):
         endPoints = agent.findClosestEscape()
-        startingPoint = np.array(game.getPacman().getCoord())
-        agent.startSearch(startingPoint, endPoints)
-        agent.panicHere = False
 
-    if (tick%30==0):
+    if (tick%30==0 or agent.panicHere):
+        agent.panicHere = False
         startingPoint = np.array(game.getPacman().getCoord())
         agent.startSearch(startingPoint, endPoints)
 
@@ -107,15 +105,15 @@ while running:
 
     if (tick%3==0):
         agent.move()
-        keys=pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-            game.getPacman().move(Direction.LEFT)
-        elif keys[pygame.K_RIGHT]:
-            game.getPacman().move(Direction.RIGHT)
-        elif keys[pygame.K_UP]:
-            game.getPacman().move(Direction.UP)
-        elif keys[pygame.K_DOWN]:
-            game.getPacman().move(Direction.DOWN)
+        # keys=pygame.key.get_pressed()
+        # if keys[pygame.K_LEFT]:
+        #     game.getPacman().move(Direction.LEFT)
+        # elif keys[pygame.K_RIGHT]:
+        #     game.getPacman().move(Direction.RIGHT)
+        # elif keys[pygame.K_UP]:
+        #     game.getPacman().move(Direction.UP)
+        # elif keys[pygame.K_DOWN]:
+        #     game.getPacman().move(Direction.DOWN)
     
     
     draw_ghosts(game.phantom[0].getCoord()[0],game.phantom[0].getCoord()[1],vel)
@@ -128,5 +126,10 @@ while running:
     pygame.time.delay(actualDelay)
 
     pygame.display.update()
+
+# while True:
+#     keys=pygame.key.get_pressed()
+#     if (keys[pygame.K_x]):
+#         break
 
 pygame.quit()

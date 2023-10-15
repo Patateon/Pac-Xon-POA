@@ -64,12 +64,13 @@ class Phantom:
                     nextX, nextY = currentX+1, currentY-1
                     nextValue = self.game.getGrid().getValue(nextX, nextY)
                     topValue, botValue = self.game.getGrid().getValue(currentX, currentY-1), self.game.getGrid().getValue(currentX+1, currentY)
-                    if (nextValue == 2 and topValue !=2 and botValue !=2) :
-                        self.game.getGrid().setValue(nextX, nextY, 3)
-                    if (topValue == 2):
-                        self.game.getGrid().setValue(currentX, currentY-1, 3)
-                    if (botValue == 2):
-                        self.game.getGrid().setValue(currentX+1, currentY, 3)
+                    if (nextValue == 2):
+                        if (topValue !=2 and botValue !=2) :
+                            self.game.getGrid().setValue(nextX, nextY, 3)
+                        if (topValue == 2):
+                            self.game.getGrid().setValue(currentX, currentY-1, 3)
+                        if (botValue == 2):
+                            self.game.getGrid().setValue(currentX+1, currentY, 3)
                     if nextValue == 0:
                         self.y = nextY
                         self.x = nextX
@@ -83,12 +84,13 @@ class Phantom:
                     nextX, nextY = currentX+1, currentY+1
                     nextValue = self.game.getGrid().getValue(nextX, nextY)
                     topValue, botValue = self.game.getGrid().getValue(currentX, currentY+1), self.game.getGrid().getValue(currentX+1, currentY)
-                    if (nextValue == 2 and topValue !=2 and botValue !=2) :
-                        self.game.getGrid().setValue(nextX, nextY, 3)
-                    if (topValue == 2):
-                        self.game.getGrid().setValue(currentX, currentY+1, 3)
-                    if (botValue == 2):
-                        self.game.getGrid().setValue(currentX+1, currentY, 3)
+                    if (nextValue == 2):
+                        if (topValue !=2 and botValue !=2) :
+                            self.game.getGrid().setValue(nextX, nextY, 3)
+                        if (topValue == 2):
+                            self.game.getGrid().setValue(currentX, currentY+1, 3)
+                        if (botValue == 2):
+                            self.game.getGrid().setValue(currentX+1, currentY, 3)
                     if nextValue == 0:
                         self.y = nextY
                         self.x = nextX
@@ -102,12 +104,13 @@ class Phantom:
                     nextX, nextY = currentX-1, currentY+1
                     nextValue = self.game.getGrid().getValue(nextX, nextY)
                     topValue, botValue = self.game.getGrid().getValue(currentX, currentY+1), self.game.getGrid().getValue(currentX-1, currentY)
-                    if (nextValue == 2 and topValue !=2 and botValue !=2) :
-                        self.game.getGrid().setValue(nextX, nextY, 3)
-                    if (topValue == 2):
-                        self.game.getGrid().setValue(currentX, currentY+1, 3)
-                    if (botValue == 2):
-                        self.game.getGrid().setValue(currentX-1, currentY, 3)
+                    if (nextValue == 2):
+                        if (topValue !=2 and botValue !=2) :
+                            self.game.getGrid().setValue(nextX, nextY, 3)
+                        if (topValue == 2):
+                            self.game.getGrid().setValue(currentX, currentY+1, 3)
+                        if (botValue == 2):
+                            self.game.getGrid().setValue(currentX-1, currentY, 3)
                     if nextValue == 0:
                         self.y = nextY
                         self.x = nextX
@@ -121,12 +124,13 @@ class Phantom:
                     nextX, nextY = currentX-1, currentY-1
                     nextValue = self.game.getGrid().getValue(nextX, nextY)
                     topValue, botValue = self.game.getGrid().getValue(currentX, currentY-1), self.game.getGrid().getValue(currentX-1, currentY)
-                    if (nextValue == 2 and topValue !=2 and botValue !=2) :
-                        self.game.getGrid().setValue(nextX, nextY, 3)
-                    if (topValue == 2):
-                        self.game.getGrid().setValue(currentX, currentY-1, 3)
-                    if (botValue == 2):
-                        self.game.getGrid().setValue(currentX-1, currentY, 3)
+                    if (nextValue == 2):
+                        if (topValue !=2 and botValue !=2) :
+                            self.game.getGrid().setValue(nextX, nextY, 3)
+                        if (topValue == 2):
+                            self.game.getGrid().setValue(currentX, currentY-1, 3)
+                        if (botValue == 2):
+                            self.game.getGrid().setValue(currentX-1, currentY, 3)
                     if nextValue == 0:
                         self.y = nextY
                         self.x = nextX
@@ -181,7 +185,7 @@ class PacMan:
         self.game = game
 
     def getCoord(self):
-        return (self.x, self.y)
+        return [self.x, self.y]
 
 
     def move(self, direction):

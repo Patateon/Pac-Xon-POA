@@ -65,19 +65,18 @@ class Agent():
     
     def translateDirection(self, direction):
         match direction:
-            case 0:
+            case Direction.UP:
                 return np.array([-1, -1])
 
-            case 1:
+            case Direction.RIGHT:
                 return np.array([-1, 1])
 
-            case 2:
+            case Direction.DOWN:
                 return np.array([1, 1])
             
-            case 3:
+            case Direction.LEFT:
                 return np.array([1, -1])
 
-        
 
     def findEndPoints(self, startingPoint, rng):
         emptyPoints = np.where(self.game.getGrid().grid==0)
@@ -90,7 +89,6 @@ class Agent():
         while self.game.getGrid().getValue(*endPoints) != 1:
             endPoints = (endPoints + direction).round().astype(int)
         return endPoints
-
 
 
     def startSearch(self, start, end):
@@ -139,14 +137,18 @@ class Agent():
     def phantomNextPos(self, n, indice):
         coordPhantom = self.game.getPhantom()[indice].getCoord()
         direction = self.game.getPhantom()[indice].getDirection()
-        direction = translateDirection(direction) # C'est Beau
-        nextPosition = np.array(coordPhantom)+direction
+        coordDirection = self.translateDirection(direction) # C'est Beau
+
+        nextPosition = np.array(coordPhantom)+coordDirection
         nextValue = self.game.getGrid().getValue(nextPosition[0], nextPosition[1])
-        for i in range(n):
-            if (nextValue == 0):
-                return phantomNextPos(n-1, nextPosition)
-            else: 
-                return phantomNextPos(n-1, coordPhantom)
+
+        for i in range(1, n):  
+            if (nextValue != 0):
+                continue
+            nextPosition = np.array(coordPhantom)+coordDirection
+            nextValue = self.game.getGrid().getValue(nextPosition[0], nextPosition[1])
+
+        return nextPosition
 
 
     def findPath(self, start, end):
@@ -164,10 +166,11 @@ class Agent():
                 if neighbour in self.closeSet:
                     continue
 
-                # phantomNextPos()
+                nodeP1 = Node(self.phantomNextPos(self.lenPath(current, start)+1, 0))
+                nodeP2 = Node(self.phantomNextPos(self.lenPath(current, start)+1, 1))
 
-                dist1 = self.dist(neighbour, Node(self.phantomNextPos(self.lenPath(neighbour, start), self.game.getPhantom()[0].getCoord())))
-                dist2 = self.dist(neighbour, Node(self.phantomNextPos(self.lenPath(neighbour, start), self.game.getPhantom()[1].getCoord())))
+                dist1 = self.dist(neighbour, nodeP1)
+                dist2 = self.dist(neighbour, nodeP2)
                 g_cost = current.getg_cost() + 1 + (self.alpha/(dist1+1) + self.alpha/(dist2+1))
 
                 # g_cost = current.getg_cost() + 1 - (self.dist(neighbour, Node(self.game.getPhantom()[0].getCoord())) + ((self.dist(neighbour, Node(self.game.getPhantom()[1].getCoord())))))
@@ -187,20 +190,21 @@ class Agent():
 
     def detectRed(self):
         if (self.game.getGrid().grid[self.game.getGrid().grid==3].shape[0] != 0):
-            panicHere = True
+            self.panicHere = True
 
     def findClosestEscape(self):
         candidats = np.where(self.game.getGrid().grid==1)
         minCandidat = [candidats[0][0],candidats[1][0]]
         for i in range(candidats[0].shape[0]):
-            candidat = [candidats[0][i],candidats[1][i]]
-            minCandidat = candidat if self.dist(Node(candidat), Node(self.game.getPacman().getCoord()))<self.dist(Node(minCandidat), Node(self.game.getPacman().getCoord())) else minCandidat
+            candidat = np.array([candidats[0][i],candidats[1][i]])
+            minCandidat = candidat if self.dist(Node(candidat), Node(np.array(self.game.getPacman().getCoord())))<self.dist(Node(minCandidat), Node(np.array(self.game.getPacman().getCoord()))) else minCandidat
         return minCandidat
 
         
     def move(self):
         if not self.path:
             self.pathFound = False
+            self.panicHere = False
             return
         nextMove = self.path.pop(0)
         direction = np.array(self.game.getPacman().getCoord())-nextMove.getPosition()
