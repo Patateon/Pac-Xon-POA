@@ -1,54 +1,53 @@
-from grid import *
-
+from game import *
+from agent import *
+import pygame
 
         
 if __name__ == "__main__":
 
-    grid_instance = Grid(10, 10,0.20)
-    grid_instance.initGrid()
-    grid_instance.setValue(1,1,2)
-    grid_instance.setValue(2,1,2)
-    grid_instance.setValue(2,2,2)
-    grid_instance.setValue(2,3,2)
-    grid_instance.setValue(3,3,2)
-    grid_instance.setValue(3,4,2)
-    grid_instance.setValue(3,5,2)
-    grid_instance.setValue(4,5,2)
-    grid_instance.setValue(5,5,2)
-    grid_instance.setValue(5,6,2)
-    grid_instance.setValue(5,7,2)
-    grid_instance.setValue(4,7,2)
-    grid_instance.setValue(3,7,2)
-    grid_instance.setValue(2,7,2)
-    grid_instance.setValue(2,6,2)
-    grid_instance.setValue(1,6,2)
-    print(grid_instance.grid)
-    grid_instance.setEndPath(True)
-    grid_instance.update(1,4,5,2)
-    print(grid_instance.grid)
-    print("Victoire? "+str(grid_instance.endGame))
+    game = Game(10, 10, 0.2, 2, [[3,5], [7, 8]])
+    game.initGame()
 
-    grid_instance2 = Grid(10, 10,0.30)
-    grid_instance2.initGrid()
-    grid_instance2.setValue(1,1,2)
-    grid_instance2.setValue(2,1,2)
-    grid_instance2.setValue(2,2,2)
-    grid_instance2.setValue(2,3,2)
-    grid_instance2.setValue(3,3,2)
-    grid_instance2.setValue(3,4,2)
-    grid_instance2.setValue(3,5,2)
-    grid_instance2.setValue(4,5,2)
-    grid_instance2.setValue(5,5,2)
-    grid_instance2.setValue(5,6,2)
-    grid_instance2.setValue(5,7,2)
-    grid_instance2.setValue(4,7,2)
-    grid_instance2.setValue(3,7,2)
-    grid_instance2.setValue(2,7,2)
-    grid_instance2.setValue(2,6,2)
-    grid_instance2.setValue(1,6,2)
-    print(grid_instance2.grid)
-    grid_instance2.setEndPath(True)
-    grid_instance2.update(4,4,5,2)
-    print(grid_instance2.grid)
-    print("Victoire? "+str(grid_instance2.endGame))
+    BLACK = (0, 0, 0)
+    DARK_BLUE = ()
+    LIGHT_BLUE = ()
+    RED = ()
+    WHITE = (200, 200, 200)
+    sizeX = game.getGrid().getSize()[0]
+    sizeY = game.getGrid().getSize()[1]
+    WINDOW_WIDTH = sizeX*25
+    WINDOW_HEIGHT = sizeY*25
 
+    global SCREEN, CLOCK
+    pygame.init()
+    SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+    CLOCK = pygame.time.Clock()
+    SCREEN.fill(BLACK)
+
+    def drawGrid():
+        blockSize = 25
+        for x in range(0, WINDOW_WIDTH, blockSize):
+            for y in range(0, WINDOW_HEIGHT, blockSize):
+                match grid[x, y]:
+                    case 0:
+                        pass
+                    case 1:
+                        pass
+                    case 2:
+                        pass
+                    case 3:
+                        pass
+                rect = pygame.Rect(x, y, blockSize, blockSize)
+                pygame.draw.rect(SCREEN, WHITE, rect, 1)
+
+    while True:
+        drawGrid()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+        pygame.display.update()
+
+
+   
