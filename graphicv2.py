@@ -100,6 +100,9 @@ while running:
     if (tick%30==0):
         startingPoint = np.array(game.getPacman().getCoord())
         agent.startSearch(startingPoint, endPoints)
+
+    if (tick>30):
+        tick = 0
     # agent.showPath()
 
     if (tick%3==0):
