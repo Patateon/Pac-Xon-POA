@@ -74,7 +74,7 @@ class Phantom:
                         self.y = nextY
                         self.x = nextX
                     else:
-                        self.changeMove(direction, topValue, botValue)
+                        self.direction = self.changeMove(direction, topValue, botValue)
                         if (not rec):
                             self.move(True)
                 
@@ -93,7 +93,7 @@ class Phantom:
                         self.y = nextY
                         self.x = nextX
                     else:
-                        self.changeMove(direction, topValue, botValue)
+                        self.direction = self.changeMove(direction, topValue, botValue)
                         if (not rec):
                             self.move(True)
 
@@ -112,7 +112,7 @@ class Phantom:
                         self.y = nextY
                         self.x = nextX
                     else:
-                        self.changeMove(direction, topValue, botValue)
+                        self.direction = self.changeMove(direction, topValue, botValue)
                         if (not rec):
                             self.move(True)
 
@@ -131,7 +131,7 @@ class Phantom:
                         self.y = nextY
                         self.x = nextX
                     else:
-                        self.changeMove(direction, topValue, botValue)
+                        self.direction = self.changeMove(direction, topValue, botValue)
                         if (not rec):
                             self.move(True)
 
@@ -142,32 +142,32 @@ class Phantom:
         match direction:
             case Direction.LEFT:
                 if (topValue != 0 and botValue != 0):
-                    self.direction = Direction.RIGHT
+                    return Direction.RIGHT
                 elif (topValue != 0):
-                    self.direction = Direction.DOWN
+                    return Direction.DOWN
                 else:
-                    self.direction = Direction.UP
+                    return Direction.UP
             case Direction.DOWN:
                 if (topValue != 0 and botValue != 0):
-                    self.direction = Direction.UP
+                    return Direction.UP
                 elif (topValue != 0):
-                    self.direction = Direction.LEFT
+                    return Direction.LEFT
                 else:
-                    self.direction = Direction.RIGHT
+                    return Direction.RIGHT
             case Direction.RIGHT:
                 if (topValue != 0 and botValue != 0):
-                    self.direction = Direction.LEFT
+                    return Direction.LEFT
                 elif (topValue != 0):
-                    self.direction = Direction.UP
+                    return Direction.UP
                 else:
-                    self.direction = Direction.DOWN
+                    return Direction.DOWN
             case Direction.UP:
                 if (topValue != 0 and botValue != 0):
-                    self.direction = Direction.DOWN
+                    return Direction.DOWN
                 elif (topValue != 0):
-                    self.direction = Direction.RIGHT
+                    return Direction.RIGHT
                 else:
-                    self.direction = Direction.LEFT
+                    return Direction.LEFT
             case _:
                 pass
 
@@ -251,29 +251,3 @@ class PacMan:
             self.game.getGrid().setEndGame(True)
 
             
-class Ghost:
-
-    def __init__(self, grid, direction):
-        self.x
-        self.y
-        self.grid = grid
-        self.direction = direction
-
-    #UP-RIGHT = 0
-    #DOWN-RIGHT = 1
-    #DOWN-LEFT = 2
-    #UP-LEFT = 3
-
-    def move(self, direction):
-        if (direction == 0 and self.y-1 == 0 and self.x+1 == 0):
-            self.y = self.y - 1
-        elif (direction == 1 and self.x+1 ==0 and self.y+1 == 0):
-            self.x = self.x + 1
-        elif (direction == 2 and self.y+1 == 0 and self.x-1 == 0):
-            self.y = self.y + 1
-        elif (direction == 3 and self.x-1 == 0 and self.y-1 == 0):
-            self.x = self.x - 1
-        elif (direction == 3):
-            self.direction = 0
-        else:
-            self.direction = direction + 1

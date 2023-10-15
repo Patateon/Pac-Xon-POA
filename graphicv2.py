@@ -52,7 +52,7 @@ def draw_pac(coord_x,coord_y,speed_pac):
 agent = Agent(game, 50)
 
 running = True
-delay = 5
+delay = 32
 tick = 0
 
 startingPoint = np.array(game.getPacman().getCoord())

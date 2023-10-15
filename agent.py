@@ -63,6 +63,22 @@ class Agent():
     def distManhattan(self, n1, n2):
         return np.linalg.norm(n1.getPosition() - n2.getPosition(), ord=1)
     
+    def translateDirection(self, direction):
+        match direction:
+            case 0:
+                return np.array([-1, -1])
+
+            case 1:
+                return np.array([-1, 1])
+
+            case 2:
+                return np.array([1, 1])
+            
+            case 3:
+                return np.array([1, -1])
+
+        
+
     def findEndPoints(self, startingPoint, rng):
         emptyPoints = np.where(self.game.getGrid().grid==0)
         indice = rng.integers(emptyPoints[0].shape[0])
@@ -104,6 +120,14 @@ class Agent():
         self.openSet = []
         self.closeSet = {None}
 
+    def lenPath(self, current, start):
+        size = 0
+        currentNode = current
+        while (currentNode != start):
+            size+=1
+            currentNode = currentNode.parent
+        return size
+
     def backTrack(self, end, start):
         path = []
         currentNode = end
@@ -111,6 +135,19 @@ class Agent():
             path.append(currentNode)
             currentNode = currentNode.parent
         return path[::-1] 
+
+    def phantomNextPos(self, n, indice):
+        coordPhantom = self.game.getPhantom()[indice].getCoord()
+        direction = self.game.getPhantom()[indice].getDirection()
+        direction = translateDirection(direction) # C'est Beau
+        nextPosition = np.array(coordPhantom)+direction
+        nextValue = self.game.getGrid().getValue(nextPosition[0], nextPosition[1])
+        for i in range(n):
+            if (nextValue == 0):
+                return phantomNextPos(n-1, nextPosition)
+            else: 
+                return phantomNextPos(n-1, coordPhantom)
+
 
     def findPath(self, start, end):
         self.openSet.append(start)
@@ -127,8 +164,10 @@ class Agent():
                 if neighbour in self.closeSet:
                     continue
 
-                dist1 = self.distManhattan(neighbour, Node(self.game.getPhantom()[0].getCoord()))
-                dist2 = self.distManhattan(neighbour, Node(self.game.getPhantom()[1].getCoord()))
+                # phantomNextPos()
+
+                dist1 = self.dist(neighbour, Node(self.phantomNextPos(self.lenPath(neighbour, start), self.game.getPhantom()[0].getCoord())))
+                dist2 = self.dist(neighbour, Node(self.phantomNextPos(self.lenPath(neighbour, start), self.game.getPhantom()[1].getCoord())))
                 g_cost = current.getg_cost() + 1 + (self.alpha/(dist1+1) + self.alpha/(dist2+1))
 
                 # g_cost = current.getg_cost() + 1 - (self.dist(neighbour, Node(self.game.getPhantom()[0].getCoord())) + ((self.dist(neighbour, Node(self.game.getPhantom()[1].getCoord())))))
