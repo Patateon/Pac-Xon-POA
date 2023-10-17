@@ -11,7 +11,7 @@ rng = np.random.default_rng()
 # Constants
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Pac-Man")
+pygame.display.set_caption("Pac-Xon")
 
 vel=20      #size of the block or speed pac bc he travels by block
 
@@ -49,10 +49,10 @@ def draw_pac(coord_x,coord_y,speed_pac):
     pygame.draw.circle(screen, (255,255,0), (radius+(coord_y*speed_pac),radius+(coord_x*speed_pac)), radius)
 
 
-agent = Agent(game, 10)
+agent = Agent(game, 10000)
 
 running = True
-delay = 32
+delay = 16
 tick = 0
 
 startingPoint = np.array(game.getPacman().getCoord())
@@ -77,7 +77,7 @@ while running:
     draw_pac(game.pacman.x,game.pacman.y,vel)
     
     agent.detectRed()
-    if (tick%4==0):
+    if (tick%6==0):
         game.getPhantom()[0].move()
         game.getPhantom()[1].move()
 
