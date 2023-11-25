@@ -149,12 +149,25 @@ class Agent():
 
         nextPosition = np.array(coordPhantom)+coordDirection
         nextValue = self.game.getGrid().getValue(nextPosition[0], nextPosition[1])
-
+        if (coordPhantom[1]+coordDirection[1]>coordPhantom[1]):
+            topValue = self.game.getGrid().getValue(coordPhantom[0], coordPhantom[1]+coordDirection[1])
+            botValue = self.game.getGrid().getValue(coordPhantom[0]+coordDirection[0], coordPhantom[1])
+        else:
+            topValue = self.game.getGrid().getValue(coordPhantom[0]+coordDirection[0], coordPhantom[1])
+            botValue = self.game.getGrid().getValue(coordPhantom[0], coordPhantom[1]+coordDirection[1])
         for i in range(1, n):  
             if (nextValue != 0):
-                continue
+                direction = self.game.getPhantom()[indice].changeMove(direction, topValue, botValue)
+                coordDirection = self.translateDirection(direction) # C'est Beau
+
             nextPosition = np.array(coordPhantom)+coordDirection
             nextValue = self.game.getGrid().getValue(nextPosition[0], nextPosition[1])
+            if (coordPhantom[1]+coordDirection[1]>coordPhantom[1]):
+                topValue = self.game.getGrid().getValue(coordPhantom[0], coordPhantom[1]+coordDirection[1])
+                botValue = self.game.getGrid().getValue(coordPhantom[0]+coordDirection[0], coordPhantom[1])
+            else:
+                topValue = self.game.getGrid().getValue(coordPhantom[0]+coordDirection[0], coordPhantom[1])
+                botValue = self.game.getGrid().getValue(coordPhantom[0], coordPhantom[1]+coordDirection[1])
 
         return nextPosition
 
