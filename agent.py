@@ -1,4 +1,5 @@
 from game import *
+from heapq import *
 import numpy as np
 
 class Node():
@@ -6,8 +7,8 @@ class Node():
     def __init__(self, position):
         self.position = position
         self.parent = None
-        self.g_cost = 0
-        self.h_cost = 0
+        self.g_cost = None
+        self.h_cost = None
 
     def f_cost(self):
         return self.g_cost + self.h_cost
@@ -35,6 +36,9 @@ class Node():
 
     def __ne__(self, other):
         return not self.__eq__(other)
+
+    def __lt__(self, other):
+        return self.f_cost() < other.f_cost()
 
     def __hash__(self):
         return hash((self.position[0], self.position[1]))
@@ -94,7 +98,11 @@ class Agent():
     def startSearch(self, start, end):
         self.clearSet()
         self.searching = True
-        self.path = self.findPath(Node(start), Node(end))
+        start = Node(start)
+        end = Node(end)
+        start.setg_cost(0)
+        start.seth_cost(self.dist(start, end))
+        self.path = self.findPath(start, end)
 
     def minF_set(self):
         minNode = self.openSet[0]
@@ -152,10 +160,14 @@ class Agent():
 
 
     def findPath(self, start, end):
-        self.openSet.append(start)
+        heappush(self.openSet, start)
+
         while len(self.openSet):
-            current = self.minF_set()
-            self.openSet.remove(current)
+            if len(self.openSet) == 1:
+                current = self.openSet[0]
+                self.openSet = []
+            else:
+                current = heappop(self.openSet)
             self.closeSet.add(current)
 
             if (current == end):
@@ -177,12 +189,15 @@ class Agent():
 
                 # g_cost = current.getg_cost() + 1 + self.alpha*np.exp((self.dist(neighbour, Node(self.game.getPhantom()[0].getCoord())) + ((self.dist(neighbour, Node(self.game.getPhantom()[1].getCoord()))))))
 
+                if (neighbour.getg_cost() == None):
+                    neighbour.setg_cost(g_cost + 1)
+
                 if (g_cost<neighbour.getg_cost() or not neighbour in self.openSet):
                     neighbour.setg_cost(g_cost)
                     neighbour.seth_cost(self.dist(neighbour, end))
                     neighbour.setParent(current)
                     if (not neighbour in self.openSet):
-                        self.openSet.append(neighbour)
+                        heappush(self.openSet, neighbour)
 
     def showPath(self):
         for node in self.path:
