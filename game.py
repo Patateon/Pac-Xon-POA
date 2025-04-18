@@ -7,7 +7,7 @@ class Direction(Enum):
     RIGHT = 1
     DOWN = 2
     LEFT = 3 # cw
-
+# HI
 class Game:
 
     def __init__ (self, x, y, tr, nPhantom, phantomCoord):
